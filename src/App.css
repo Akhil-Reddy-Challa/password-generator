@@ -1,15 +1,16 @@
 .App {
   width: fit-content;
   height: 100%;
-  background-color: #212123;
+  margin: 0 auto;
+  background: #000000;
+  background: -webkit-linear-gradient(to bottom, #434343, #000000);
+  background: linear-gradient(to bottom, #434343, #000000);
 }
 /* When viewport is >1440px align app to the center instead of flexing */
 @media screen and (min-width: 1441px) {
   .App {
-    margin: 0 auto;
     height: 90vh;
     margin-top: 50px;
-    border: 1px solid black;
   }
 }
 table {
@@ -65,7 +66,7 @@ table {
   width: 250px;
 }
 .last-row {
-  width: 466px;
+  width: 500px;
 }
 .copystatus {
   height: 35px;
