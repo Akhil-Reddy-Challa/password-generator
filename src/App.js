@@ -38,7 +38,7 @@ function App() {
     copyToClipBoard();
   };
   const copyToClipBoard = () => {
-    navigator.clipboard.writeText(passwordText);
+    navigator?.clipboard?.writeText(passwordText);
     setCopyStatus(true);
     setTimeout(() => setCopyStatus(false), 5000);
   };
