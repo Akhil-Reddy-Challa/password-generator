@@ -14,10 +14,10 @@ function App() {
     ];
 
     const newCats = [];
-    includeSymbols && newCats.push(cats[0]);
-    includeNumbers && newCats.push(cats[1]);
-    includeLowercase && newCats.push(cats[2]);
-    includeUppercase && newCats.push(cats[3]);
+    pwdConfig.symbols && newCats.push(cats[0]);
+    pwdConfig.numbers && newCats.push(cats[1]);
+    pwdConfig.lowercase && newCats.push(cats[2]);
+    pwdConfig.uppercase && newCats.push(cats[3]);
     return newCats;
   };
   const generatePassword = () => {
@@ -27,7 +27,7 @@ function App() {
       return;
     }
     const newPassword = [];
-    for (let idx = 0; idx < passwordLength; idx++) {
+    for (let idx = 0; idx < parseInt(pwdConfig.len); idx++) {
       // Get random category
       const category = categories[getRandom(categories.length)];
       // From the category get a random character
@@ -42,16 +42,37 @@ function App() {
     setCopyStatus(true);
     setTimeout(() => setCopyStatus(false), 5000);
   };
+  const changeConfig = (type, val) => {
+    const prev = { ...pwdConfig };
+    prev[type] = val;
+    setPwdConfig(() => ({ ...prev }));
+  };
   const [copyStatus, setCopyStatus] = useState(false);
   const [passwordText, setPasswordText] = useState("");
-  const [passwordLength, setPasswordLength] = useState(16);
-  const [includeSymbols, setSymbols] = useState(true);
-  const [includeNumbers, setNumbers] = useState(true);
-  const [includeLowercase, setLower] = useState(true);
-  const [includeUppercase, setUpper] = useState(true);
+  const [pwdConfig, setPwdConfig] = useState({
+    len: 16,
+    symbols: true,
+    lowercase: true,
+    uppercase: true,
+    numbers: true,
+  });
 
   const strongNums = [...Array(113).keys()];
   const weakNums = [...Array(15).keys()];
+  const categories = [
+    { name: "symbols", desc: "Include Symbols:", exmp: "e.g. @#$%" },
+    {
+      name: "lowercase",
+      desc: "Include Lowercase Characters:",
+      exmp: "e.g. qwerty",
+    },
+    {
+      name: "uppercase",
+      desc: "Include Uppercase Characters:",
+      exmp: "e.g. ASDFGH",
+    },
+    { name: "numbers", desc: "Include Numbers:", exmp: "e.g. 123456" },
+  ];
 
   return (
     <div className="App">
@@ -63,7 +84,7 @@ function App() {
               <select
                 title="Select the length of your password."
                 className="pwd-length"
-                onChange={(e) => setPasswordLength(parseInt(e.target.value))}
+                onChange={(e) => changeConfig("len", e.target.value)}
               >
                 <optgroup label="Strong">
                   {strongNums.map((num) => (
@@ -82,66 +103,23 @@ function App() {
               </select>
             </td>
           </tr>
-          <tr>
-            <td className="itemDesc">Include Symbols:</td>
-            <td>
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => setSymbols(!includeSymbols)}
-                    checked={includeSymbols}
-                  />
-                  ( e.g. @#$% )
-                </label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td className="itemDesc">Include Numbers:</td>
-            <td>
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => setNumbers(!includeNumbers)}
-                    checked={includeNumbers}
-                  />
-                  ( e.g. 123456 )
-                </label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td className="itemDesc">Include Lowercase Characters:</td>
-            <td>
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => setLower(!includeLowercase)}
-                    checked={includeLowercase}
-                  />
-                  ( e.g. qwerty)
-                </label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td className="itemDesc">Include Uppercase Characters:</td>
-            <td>
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => setUpper(!includeUppercase)}
-                    checked={includeUppercase}
-                  />
-                  ( e.g. ASDFGH )
-                </label>
-              </div>
-            </td>
-          </tr>
+          {categories.map((cat) => (
+            <tr key={cat.name}>
+              <td className="itemDesc">{cat.desc}</td>
+              <td>
+                <div>
+                  <label>
+                    <input
+                      type="checkbox"
+                      onChange={(e) => changeConfig(cat.name, e.target.checked)}
+                      defaultChecked={true}
+                    />
+                    {`(${cat.exmp})`}
+                  </label>
+                </div>
+              </td>
+            </tr>
+          ))}
           <tr>
             <td></td>
             <td>
