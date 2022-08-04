@@ -1,2 +1,2 @@
 ## Hosted
-https://my-password-gen.netlify.app/
+https://new-password.netlify.app/
