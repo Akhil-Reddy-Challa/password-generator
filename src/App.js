@@ -23,7 +23,7 @@ function App() {
   const generatePassword = () => {
     let categories = filterCategories();
     if (!categories.length) {
-      setPasswordText("Check any boxes above");
+      setPassword("Check any boxes above");
       return;
     }
     const newPassword = [];
@@ -34,11 +34,11 @@ function App() {
       const randomChar = category[getRandom(category.length)];
       newPassword.push(randomChar);
     }
-    setPasswordText(newPassword.join(""));
-    copyToClipBoard();
+    copyToClipBoard(newPassword.join(""));
   };
-  const copyToClipBoard = () => {
-    navigator?.clipboard?.writeText(passwordText);
+  const copyToClipBoard = (password) => {
+    navigator?.clipboard?.writeText(password);
+    setPassword(password);
     setCopyStatus(true);
     setTimeout(() => setCopyStatus(false), 5000);
   };
@@ -48,7 +48,7 @@ function App() {
     setPwdConfig(() => ({ ...prev }));
   };
   const [copyStatus, setCopyStatus] = useState(false);
-  const [passwordText, setPasswordText] = useState("");
+  const [password, setPassword] = useState("");
   const [pwdConfig, setPwdConfig] = useState({
     len: 16,
     symbols: true,
@@ -135,7 +135,7 @@ function App() {
                 <input
                   type="text"
                   className="generated-password-text"
-                  value={passwordText}
+                  value={password}
                   readOnly
                 />
                 <div className="copystatus flex">
